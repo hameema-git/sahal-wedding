@@ -673,7 +673,7 @@ export default function App() {
                   <span className="mb-1 flex items-center justify-center gap-2 text-[10px] uppercase tracking-[0.3em] text-gold/80">
                     <Users className="h-3.5 w-3.5" /> Daughter of
                   </span>
-                  Kunju Muhammed V. L., Vettuveli & Nadeera V. P., Velukkuty House
+                  Kunju Muhammed V. L., Vettuveli & Nadeera V. P., Vellukuzhy House
                 </p>
                 <p className="border-t border-gold/20 pt-4 font-script text-3xl text-gold-light">
                   InshaAllah
@@ -980,7 +980,7 @@ export default function App() {
             <div className="rounded-2xl border border-gold/25 bg-emerald-deep/60 p-5">
               <p className="text-[10px] uppercase tracking-[0.35em] text-gold">With love from</p>
               <p className="mt-2 font-serif text-base text-cream/90">
-                Vettuveli & Velukkuty House Families
+                Vettuveli & Vellukuzhy House Families
               </p>
             </div>
           </div>
