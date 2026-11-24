@@ -13,7 +13,6 @@ import {
   Users,
   Sparkles,
   Church,
-  Share2,
   CalendarPlus,
   ArrowUp,
   Phone,
@@ -29,15 +28,14 @@ const NIKKAH = {
   dateLabel: "Thursday · 26 November 2026",
   shortDate: "26 NOV 2026",
   time: "11:30 AM onwards",
-  hall: "Kunjunnikkara Muslim Jama-Ath Auditorium",
-  venue: "TMJ Cultural Center, Thottakkattukara",
+  hall: "TMJ Cultural Center",
+  venue: "Thottakkattukara, near Juma Masjid",
   address: "Aluva, Ernakulam — 683102",
   fullAddress:
-    "Kunjunnikkara Muslim Jama-Ath Auditorium, TMJ Cultural Center, Thottakkattukara, Aluva, Ernakulam — 683102",
-  mapsUrl:
-    "https://www.google.com/maps/search/?api=1&query=TMJ+Cultural+Center+Thottakkattukara+Aluva+Ernakulam+683102",
+    "TMJ Cultural Center, Thottakkattukara (near Thottakkattukara Juma Masjid), Aluva, Ernakulam — 683102",
+  mapsUrl: "https://maps.app.goo.gl/jmjHunskkFowMme27?g_st=awb",
   embedUrl:
-    "https://www.google.com/maps?q=TMJ+Cultural+Center+Thottakkattukara+Aluva+Ernakulam+683102&output=embed",
+    "https://www.google.com/maps?q=48FQ%2B4H7+Thottakkattukara+Juma+Masjid+Aluva+Keralam+683102&output=embed",
 };
 
 const RECEPTION = {
@@ -56,6 +54,57 @@ const RECEPTION = {
 };
 
 const TARGET = new Date("2026-11-26T11:30:00+05:30").getTime();
+
+/* ============================================================
+   WHATSAPP SHARE MESSAGE
+============================================================ */
+const buildWhatsAppMessage = (url: string) =>
+  [
+    "🌙 *Nikkah Invitation* 🌙",
+    "_Bismillahir Rahmanir Raheem_",
+    "",
+    "With the blessings of Almighty Allah, we joyfully invite you to the Nikkah of",
+    "",
+    "💍 *Mohammed Sahal ♥ Saliha*",
+    "📅 Thursday, 26 November 2026",
+    "",
+    "💌 *Open your invitation:*",
+    url,
+    "",
+    "🕌 *Nikkah* · 11:30 AM onwards",
+    "📍 TMJ Cultural Center, Thottakkattukara (near Juma Masjid), Aluva",
+    `🗺️ ${NIKKAH.mapsUrl}`,
+    "",
+    "🍽️ *Reception* · 6:00 – 10:00 PM",
+    "📍 Njalakam Jama-Ath Convention Center, Kalamassery",
+    `🗺️ ${RECEPTION.mapsUrl}`,
+    "",
+    "_Your presence and duas will make our day complete. InshaAllah we await you with joy._ 🤍",
+  ].join("\n");
+
+/* renders WhatsApp-style *bold* and _italic_ inside the preview bubble */
+function renderWhatsAppLine(line: string, key: number) {
+  const parts = line.split(/(\*[^*]+\*|_[^_]+_)/g).filter(Boolean);
+  return (
+    <p key={key} className={line === "" ? "h-2" : "break-words"}>
+      {parts.map((part, i) => {
+        if (part.startsWith("*") && part.endsWith("*"))
+          return <strong key={i}>{part.slice(1, -1)}</strong>;
+        if (part.startsWith("_") && part.endsWith("_"))
+          return <em key={i}>{part.slice(1, -1)}</em>;
+        return <span key={i}>{part}</span>;
+      })}
+    </p>
+  );
+}
+
+function WhatsAppIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+      <path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.14-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.22 3.08.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.69.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35zM12.05 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.9-9.88a9.82 9.82 0 0 1 6.99 2.9 9.82 9.82 0 0 1 2.89 6.99c0 5.45-4.44 9.88-9.89 9.88zM20.52 3.45A11.8 11.8 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.45h.01c6.55 0 11.89-5.34 11.89-11.89 0-3.18-1.24-6.17-3.48-8.41z" />
+    </svg>
+  );
+}
 
 /* ============================================================
    SMALL PIECES
@@ -276,24 +325,12 @@ export default function App() {
     URL.revokeObjectURL(url);
   };
 
-  const shareInvite = async () => {
-    const data = {
-      title: "Mohammed Sahal ♥ Saliha — Nikkah Invitation",
-      text: "With the blessings of Almighty Allah — Join us for the Nikkah of Mohammed Sahal & Saliha on 26 Nov 2026. Tap to open the invitation.",
-      url: window.location.href,
-    };
-    if (navigator.share) {
-      try {
-        await navigator.share(data);
-      } catch {
-        /* dismissed */
-      }
-    } else {
-      window.open(
-        `https://wa.me/?text=${encodeURIComponent(data.text + " " + data.url)}`,
-        "_blank"
-      );
-    }
+  const waMessage = buildWhatsAppMessage(
+    typeof window !== "undefined" ? window.location.href.split("#")[0] : ""
+  );
+
+  const sendWhatsApp = () => {
+    window.open(`https://wa.me/?text=${encodeURIComponent(waMessage)}`, "_blank", "noopener");
   };
 
   const pad = (n: number) => String(n).padStart(2, "0");
@@ -370,10 +407,10 @@ export default function App() {
           </div>
           <div className="flex items-center gap-2">
             <button
-              onClick={shareInvite}
-              className="hidden items-center gap-2 rounded-full border border-gold/40 px-4 py-2 text-[11px] uppercase tracking-[0.2em] text-gold-light transition hover:bg-gold/15 sm:inline-flex"
+              onClick={sendWhatsApp}
+              className="hidden items-center gap-2 rounded-full border border-[#25D366]/50 px-4 py-2 text-[11px] uppercase tracking-[0.2em] text-[#7fe3a5] transition hover:bg-[#25D366]/15 sm:inline-flex"
             >
-              <Share2 className="h-3.5 w-3.5" /> Share
+              <WhatsAppIcon className="h-3.5 w-3.5" /> Share
             </button>
             <a
               href="#location"
@@ -921,6 +958,8 @@ export default function App() {
       </section>
 
       {/* ================= FOOTER ================= */}
+
+
       <footer className="relative border-t border-gold/25 bg-night pattern-bg">
         <div className="mx-auto max-w-4xl px-6 py-14 text-center">
           <div className="reveal mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-gold/50 bg-emerald-deep">
@@ -964,10 +1003,10 @@ export default function App() {
               <MapPin className="h-4 w-4" /> Reception Location
             </a>
             <button
-              onClick={shareInvite}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-gold/60 px-7 py-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-gold-pale transition hover:bg-gold/15 sm:w-auto"
+              onClick={sendWhatsApp}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-7 py-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#06301c] transition hover:bg-[#3be077] sm:w-auto"
             >
-              <Share2 className="h-4 w-4" /> Share Invite
+              <WhatsAppIcon className="h-4 w-4" /> Share on WhatsApp
             </button>
           </div>
 
