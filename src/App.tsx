@@ -673,7 +673,7 @@ export default function App() {
                   <span className="mb-1 flex items-center justify-center gap-2 text-[10px] uppercase tracking-[0.3em] text-gold/80">
                     <Users className="h-3.5 w-3.5" /> Daughter of
                   </span>
-                  Kunju Muhammed V. L., Vettuveli & Nadeera V. P., Vellukuzhy House
+                  Kunju Muhammed V. I., Vettuvelil & Nadeera V. P., Vellukuzhy House
                 </p>
                 <p className="border-t border-gold/20 pt-4 font-script text-3xl text-gold-light">
                   InshaAllah
